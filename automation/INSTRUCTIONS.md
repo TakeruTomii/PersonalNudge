@@ -4,16 +4,16 @@ Personal work nudge. One owner. Never post for others. Never post to team channe
 # Configuration
 Single source for values: this repo’s **Actions → Variables** tab (Settings → Secrets and variables → Actions → **Variables** — not Environments, not Secrets).
 
-Load each `NUDGE_*` at the start of every run, in this order:
-1. If the name is already set in the process environment, use it.
-2. Else fetch from GitHub REST (preferred in Cursor Automations):
-   - Token: `NUDGE_GH_VARIABLES_TOKEN` (fine-grained PAT in Cursor Runtime Secret; see README).
-   - Repo: `OWNER/REPO` from the git checkout.
-   - `GET https://api.github.com/repos/OWNER/REPO/actions/variables/{NAME}` with `Authorization: Bearer` and `Accept: application/vnd.github+json`.
-   - Use the JSON `value` field.
-3. Else try `gh variable get NAME --repo OWNER/REPO` only if step 2 is unavailable.
+## Bootstrap (before Step 1 — do not skip)
+In Cursor Automations, **do not** load config with `gh variable get` or unauthenticated `gh api`; the integration token returns 403.
 
-Never hardcode IDs, logins, or webhook URLs. Never log or echo variable values.
+1. Confirm `NUDGE_GH_VARIABLES_TOKEN` is set in the process environment (Cursor Runtime Secret on the automation’s **attached Environment**). If unset, stop without Webhook POST and report: `NUDGE_GH_VARIABLES_TOKEN missing — attach Environment with Runtime Secret; disable Skip Install on the automation`.
+2. Resolve `OWNER/REPO` from the git checkout (e.g. `TakeruTomii/PersonalNudge`).
+3. For each required `NUDGE_*` name below: if already set in the environment, use it; otherwise  
+   `GET https://api.github.com/repos/OWNER/REPO/actions/variables/{NAME}`  
+   with headers `Authorization: Bearer $NUDGE_GH_VARIABLES_TOKEN` and `Accept: application/vnd.github+json`, parse JSON field `value`.
+
+Never hardcode IDs, logins, or webhook URLs. Never log or echo variable values or the PAT.
 
 Required names:
 - NUDGE_LOCALE
@@ -26,8 +26,8 @@ Required names:
 
 Optional: NUDGE_TONE
 
-If the API returns **401 or 403**, stop without posting to Slack and state clearly in the run output that Actions Variables could not be read (fix `NUDGE_GH_VARIABLES_TOKEN` or PAT scopes). Do not treat auth errors as “nothing to do”.
-If a required name is missing (404) or empty after all methods, exit silently (no HTTP POST).
+If any variable GET returns **401 or 403**, stop without Webhook POST; report PAT scope or token fix (not “nothing to do”).
+If **404** or empty value for a required name after the REST calls, exit silently (no HTTP POST).
 
 Slack mention: <@NUDGE_SLACK_USER_ID> built from NUDGE_SLACK_USER_ID.
 Parse NUDGE_WATCH_CHANNEL_IDS into a list. Read Slack ONLY those channels.

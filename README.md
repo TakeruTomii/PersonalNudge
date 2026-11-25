@@ -38,24 +38,29 @@ If that works on your laptop but the automation fails, the fix is step 3 (PAT), 
    - Repository access: **Only** `PersonalNudge`  
    - Permissions: **Metadata** read, **Actions** read (enough to read Actions Variables)
 
-2. **Cursor** → Cloud / Environment attached to your automation → **Runtime Secret**  
-   - Name: `NUDGE_GH_VARIABLES_TOKEN`  
+2. **Cursor** → create or open a Cloud **Environment** → **Runtime Secret**  
+   - Name: `NUDGE_GH_VARIABLES_TOKEN` (exact spelling)  
    - Value: the PAT  
 
    Do **not** duplicate every `NUDGE_*` in Cursor — only this token.
 
-3. Automation **Repository** = this repo; **Skip Install** off if secrets do not inject (see Cursor forum threads on automations + environments).
+3. In the **Automation** editor, under **Environment**, select that Environment (not “no environment”). **Skip Install** must be **off** or secrets never inject.
+
+4. PAT value does **not** go in the Instructions text — only the secret name above. The agent reads it from the VM environment.
 
 ## 4. Cursor Automation
 
 1. **Repository** — `PersonalNudge`, default branch.  
-2. **Schedule (UTC)** — `0 1,4,7,9 * * 1-5` (Mon–Fri 10 / 13 / 16 / 18 JST).  
-3. **Tools** — GitHub + Slack read; **Send to Slack off**.  
-4. **Instructions:**
+2. **Environment** — the one that has Runtime Secret `NUDGE_GH_VARIABLES_TOKEN`.  
+3. **Schedule (UTC)** — `0 1,4,7,9 * * 1-5` (Mon–Fri 10 / 13 / 16 / 18 JST).  
+4. **Tools** — GitHub + Slack read; **Send to Slack off**.  
+5. **Instructions** — paste (PAT value **never** here):
 
    ```
-   Read and follow automation/INSTRUCTIONS.md in this repository. Execute it exactly. Do not use Send to Slack.
+   Read and follow automation/INSTRUCTIONS.md in this repository. Execute it exactly. Do not use Send to Slack. Load NUDGE_* via GitHub REST using the NUDGE_GH_VARIABLES_TOKEN environment variable; do not use gh variable get.
    ```
+
+   After changing this block or `INSTRUCTIONS.md`, run once manually so the checkout picks up `main`.
 
 ## 5. Smoke test
 
@@ -69,7 +74,9 @@ Fork; each person sets their own GitHub Variables + their own `NUDGE_GH_VARIABLE
 
 | Symptom | Fix |
 |---------|-----|
-| 403 on variable read | Add `NUDGE_GH_VARIABLES_TOKEN`; Cursor `gh` alone is not enough |
+| 403 on variable read | Automation must use REST + `NUDGE_GH_VARIABLES_TOKEN`; `gh variable get` will always fail |
+| Log says token unset | Environment not selected on automation, or Skip Install on, or secret name typo |
+| Still uses `gh variable get` | Update editor Instructions line + latest `main` `INSTRUCTIONS.md` |
 | Silent run, vars set | Was auth failure treated as empty — check run log after prompt update |
 | Vars only under **Environments** | Move to **Actions → Variables** (repo tab) |
 | Webhook only in **Secrets** | Move URL to **Variables** (Secrets are not readable) |
