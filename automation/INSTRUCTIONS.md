@@ -2,23 +2,32 @@
 Personal work nudge. One owner. Never post for others. Never post to team channels.
 
 # Configuration
-Single source: this repository’s GitHub Actions **Variables** (Settings → Secrets and variables → Actions → Variables).
-At the start of each run, resolve `OWNER/REPO` from the git checkout, then load each required name with `gh variable get <NAME> --repo OWNER/REPO`.
-Do not use Cursor Environment for NUDGE_* unless a value is already set in the process environment (then prefer that).
-Never hardcode IDs, logins, or webhook URLs. Never log or echo values.
+Single source for values: this repo’s **Actions → Variables** tab (Settings → Secrets and variables → Actions → **Variables** — not Environments, not Secrets).
 
-Required variable names:
+Load each `NUDGE_*` at the start of every run, in this order:
+1. If the name is already set in the process environment, use it.
+2. Else fetch from GitHub REST (preferred in Cursor Automations):
+   - Token: `NUDGE_GH_VARIABLES_TOKEN` (fine-grained PAT in Cursor Runtime Secret; see README).
+   - Repo: `OWNER/REPO` from the git checkout.
+   - `GET https://api.github.com/repos/OWNER/REPO/actions/variables/{NAME}` with `Authorization: Bearer` and `Accept: application/vnd.github+json`.
+   - Use the JSON `value` field.
+3. Else try `gh variable get NAME --repo OWNER/REPO` only if step 2 is unavailable.
+
+Never hardcode IDs, logins, or webhook URLs. Never log or echo variable values.
+
+Required names:
 - NUDGE_LOCALE
 - NUDGE_GH_REVIEWER          (GitHub username for reviewer checks)
 - NUDGE_SLACK_USER_ID
 - NUDGE_TIMES_CHANNEL_ID
 - NUDGE_WATCH_CHANNEL_IDS    (comma-separated Slack channel IDs; trim each)
 - NUDGE_GITHUB_REPOS         (comma-separated owner/repo)
-- NUDGE_SLACK_WEBHOOK_URL    (Actions **Variable** on this repo — GitHub Secrets are not readable)
+- NUDGE_SLACK_WEBHOOK_URL    (Actions Variable on this repo)
 
 Optional: NUDGE_TONE
 
-If `gh variable get` fails for a required name, exit silently (no HTTP POST).
+If the API returns **401 or 403**, stop without posting to Slack and state clearly in the run output that Actions Variables could not be read (fix `NUDGE_GH_VARIABLES_TOKEN` or PAT scopes). Do not treat auth errors as “nothing to do”.
+If a required name is missing (404) or empty after all methods, exit silently (no HTTP POST).
 
 Slack mention: <@NUDGE_SLACK_USER_ID> built from NUDGE_SLACK_USER_ID.
 Parse NUDGE_WATCH_CHANNEL_IDS into a list. Read Slack ONLY those channels.
