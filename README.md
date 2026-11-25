@@ -34,9 +34,10 @@ If that works on your laptop but the automation fails, the fix is step 3 (PAT), 
 
 ## 3. Cursor — one secret for GitHub read
 
-1. **Fine-grained PAT** ([GitHub → Settings → Developer settings → Fine-grained tokens](https://github.com/settings/personal-access-tokens))  
+1. **Fine-grained PAT** ([GitHub → Settings → Developer settings → Fine-grained tokens](https://github.com/settings/personal-access-tokens/new))  
    - Repository access: **Only** `PersonalNudge`  
-   - Permissions: **Metadata** read, **Actions** read (enough to read Actions Variables)
+   - Permissions: **Metadata: Read-only** and **Variables: Read-only** (`actions_variables=read`)  
+   - **Not** enough: **Actions** read alone — that does **not** grant Actions Variables API access (403).
 
 2. **Cursor** → create or open a Cloud **Environment** → **Runtime Secret**  
    - Name: `NUDGE_GH_VARIABLES_TOKEN` (exact spelling)  
@@ -47,6 +48,20 @@ If that works on your laptop but the automation fails, the fix is step 3 (PAT), 
 3. In the **Automation** editor, under **Environment**, select that Environment (not “no environment”). **Skip Install** must be **off** or secrets never inject.
 
 4. PAT value does **not** go in the Instructions text — only the secret name above. The agent reads it from the VM environment.
+
+## 3b. Cloud Environment setup (optional)
+
+This repo has **no app build** (README + prompt only). Guided setup may pause on “install”; you can **save the Environment** once checkout works and `NUDGE_GH_VARIABLES_TOKEN` is set. A snapshot is optional.
+
+Verify PAT before Save:
+
+```bash
+curl -s -H "Authorization: Bearer $NUDGE_GH_VARIABLES_TOKEN" \
+  -H "Accept: application/vnd.github+json" \
+  https://api.github.com/repos/TakeruTomii/PersonalNudge/actions/variables/NUDGE_LOCALE
+```
+
+Expect JSON with `"value"` — not 403.
 
 ## 4. Cursor Automation
 
@@ -74,7 +89,8 @@ Fork; each person sets their own GitHub Variables + their own `NUDGE_GH_VARIABLE
 
 | Symptom | Fix |
 |---------|-----|
-| 403 on variable read | Automation must use REST + `NUDGE_GH_VARIABLES_TOKEN`; `gh variable get` will always fail |
+| 403 on variable read | PAT needs **Variables: Read-only**, not only Actions read; update secret if token string changed |
+| 403 with Metadata OK | Same as above — add **Variables: Read-only** on the fine-grained PAT |
 | Log says token unset | Environment not selected on automation, or Skip Install on, or secret name typo |
 | Still uses `gh variable get` | Update editor Instructions line + latest `main` `INSTRUCTIONS.md` |
 | Silent run, vars set | Was auth failure treated as empty — check run log after prompt update |

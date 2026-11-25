@@ -26,7 +26,7 @@ Required names:
 
 Optional: NUDGE_TONE
 
-If any variable GET returns **401 or 403**, stop without Webhook POST; report PAT scope or token fix (not “nothing to do”).
+If any variable GET returns **401 or 403**, stop without Webhook POST; report that the fine-grained PAT needs **Metadata: Read-only** and **Variables: Read-only** on this repo (**Actions** read alone is insufficient).
 If **404** or empty value for a required name after the REST calls, exit silently (no HTTP POST).
 
 Slack mention: <@NUDGE_SLACK_USER_ID> built from NUDGE_SLACK_USER_ID.
