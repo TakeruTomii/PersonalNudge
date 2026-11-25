@@ -41,7 +41,9 @@ If that works on your laptop but the automation fails, the fix is step 3 (PAT), 
 
 2. **Cursor** → create or open a Cloud **Environment** → **Runtime Secret**  
    - Name: `NUDGE_GH_VARIABLES_TOKEN` (exact spelling)  
-   - Value: the PAT  
+   - Value: the PAT **string shown once** when you generate the token (starts with `github_pat_…`)
+
+   If you **edit** a fine-grained PAT’s permissions, GitHub may issue a **new** string — you must **paste that new string** here again (old string → **401 Bad credentials**). Already-running setup VMs keep the old value until you save and start a new run.
 
    Do **not** duplicate every `NUDGE_*` in Cursor — only this token.
 
@@ -91,6 +93,7 @@ Fork; each person sets their own GitHub Variables + their own `NUDGE_GH_VARIABLE
 |---------|-----|
 | 403 on variable read | PAT needs **Variables: Read-only**, not only Actions read; update secret if token string changed |
 | 403 with Metadata OK | Same as above — add **Variables: Read-only** on the fine-grained PAT |
+| **401** Bad credentials | PAT rotated or revoked — generate/copy token again → update Runtime Secret → new run |
 | Log says token unset | Environment not selected on automation, or Skip Install on, or secret name typo |
 | Still uses `gh variable get` | Update editor Instructions line + latest `main` `INSTRUCTIONS.md` |
 | Silent run, vars set | Was auth failure treated as empty — check run log after prompt update |
