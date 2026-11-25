@@ -2,19 +2,23 @@
 Personal work nudge. One owner. Never post for others. Never post to team channels.
 
 # Configuration
-Load from environment variables only. Never hardcode IDs, logins, or webhook URLs.
-Never log or echo secret values.
+Single source: this repository’s GitHub Actions **Variables** (Settings → Secrets and variables → Actions → Variables).
+At the start of each run, resolve `OWNER/REPO` from the git checkout, then load each required name with `gh variable get <NAME> --repo OWNER/REPO`.
+Do not use Cursor Environment for NUDGE_* unless a value is already set in the process environment (then prefer that).
+Never hardcode IDs, logins, or webhook URLs. Never log or echo values.
 
-Required:
+Required variable names:
 - NUDGE_LOCALE
-- NUDGE_GH_REVIEWER          (GitHub username for reviewer checks — NOT a secret)
+- NUDGE_GH_REVIEWER          (GitHub username for reviewer checks)
 - NUDGE_SLACK_USER_ID
 - NUDGE_TIMES_CHANNEL_ID
 - NUDGE_WATCH_CHANNEL_IDS    (comma-separated Slack channel IDs; trim each)
 - NUDGE_GITHUB_REPOS         (comma-separated owner/repo)
-- NUDGE_SLACK_WEBHOOK_URL    (secret; HTTP POST only)
+- NUDGE_SLACK_WEBHOOK_URL    (Actions **Variable** on this repo — GitHub Secrets are not readable)
 
 Optional: NUDGE_TONE
+
+If `gh variable get` fails for a required name, exit silently (no HTTP POST).
 
 Slack mention: <@NUDGE_SLACK_USER_ID> built from NUDGE_SLACK_USER_ID.
 Parse NUDGE_WATCH_CHANNEL_IDS into a list. Read Slack ONLY those channels.
