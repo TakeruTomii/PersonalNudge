@@ -53,10 +53,22 @@ For each repo in NUDGE_GITHUB_REPOS:
 Do NOT treat Slack "Pending review" posts as authoritative; use them only as hints after Step 1.
 
 # Step 2 — Slack (watched channels only)
-- Pending review bots: items waiting on NUDGE_SLACK_USER_ID (re-validate in Step 1)
+Read only channels in `NUDGE_WATCH_CHANNEL_IDS` (e.g. dev engineers, review/PR channels such as `C08L2BAC525`). Within the Slack time window:
+
+**Reviews & PRs (Slack hints; PR state still from Step 1)**
+- Pending review bots: items waiting on NUDGE_SLACK_USER_ID
+- Posts that **request your review** (bot or human): you are named reviewer, @mentioned, or thread asks you to review
+- Posts where **you asked for review** and the thread is still open (no merge/close/done in thread)
+- Shared GitHub PR links in watch channels where you are clearly the intended reviewer (cross-check Step 1)
+
+**Duty & housekeeping**
 - Today: standup chair or alert sentinel assigned to NUDGE_SLACK_USER_ID
 - LD cleanup mentioning NUDGE_SLACK_USER_ID as reviewer or assignee
-- Direct @NUDGE_SLACK_USER_ID with clear action (skip FYI and resolved threads)
+
+**Follow-ups**
+- Direct @NUDGE_SLACK_USER_ID with a clear action (skip FYI, celebrations, and resolved threads)
+
+Drop Step 2 review hints that Step 1 already shows as merged, closed, or approved by you.
 
 # Step 3 — Compose
 If zero items after Steps 1–2: exit silently.
