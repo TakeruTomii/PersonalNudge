@@ -60,13 +60,7 @@ Do NOT treat Slack "Pending review" posts as authoritative; use them only as hin
 
 # Step 3 — Compose
 If zero items after Steps 1–2: exit silently.
-One message with sections:
-1) Renovate / high-priority reviews
-2) Other review requests
-3) Today's duty (chair / sentinel)
-4) Slack follow-ups
-
-One line per item with link.
+Format the message strictly per **automation/FORMAT.md** (read that file from this repo).
 
 # Step 4 — Deliver (webhook ONLY)
 Do NOT use Cursor "Send to Slack" or post as the Cursor app.
