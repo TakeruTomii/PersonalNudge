@@ -9,8 +9,12 @@ Compose the webhook body in **Slack mrkdwn** inside the JSON `"text"` field. If 
 
 ## Opening
 
-- Start with one line: `<@NUDGE_SLACK_USER_ID>` plus a short intro (locale from `NUDGE_LOCALE`).
-- Example (ja): `<@U…> 未完了のまとめ（{weekday} {HH:MM} JST）`
+- Start with `<@NUDGE_SLACK_USER_ID>` plus a short, light intro (`NUDGE_LOCALE` + optional `NUDGE_TONE`).
+- **ja (default copy):**  
+  `<@U…> お疲れ様です！代わりに現況を調べてまいりました！お手隙の時にご確認ください！（{weekday} {HH:MM} JST）`
+- **en:**  
+  `<@U…> Hope your day’s going well — I pulled together what’s still open for you. Peek when you have a moment! ({weekday} {HH:MM} JST)`
+- **bilingual:** ja line first, then one shorter en line.
 
 ## Sections (fixed order)
 
