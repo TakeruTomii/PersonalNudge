@@ -22,7 +22,7 @@ Render only sections that have at least one item. Never print empty section head
 
 | # | ja heading | en heading |
 |---|------------|------------|
-| 1 | *Renovate / 優先レビュー* | *Renovate / high-priority reviews* |
+| 1 | *自動PR（Renovate・LD など）* | *Automated PRs (Renovate, LD, …)* |
 | 2 | *その他レビュー（受信・依頼）* | *Other reviews (inbox & asked)* |
 | 3 | *今日の当番* | *Today's duty* |
 | 4 | *Slack フォロー* | *Slack follow-ups* |

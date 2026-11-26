@@ -49,7 +49,12 @@ Apply NUDGE_TONE if set.
 For each repo in `NUDGE_GITHUB_REPOS`:
 - List **open** PRs where `NUDGE_GH_REVIEWER` is still a requested reviewer and has **not** submitted APPROVE.
 - Exclude: merged, closed, or user no longer a reviewer.
-- Tag Renovate when author is `renovate[bot]` or head branch matches `renovate/*`.
+- Classify each PR with exactly one **`[Kind]`** prefix for the line label (always show in output):
+  - `[Renovate]` — author `renovate[bot]` or head branch `renovate/*`
+  - `[LD]` — title/body/labels suggest LD cleanup or dependency lockfile bot workflows (e.g. `LD`, `lockfile`, `dependency`, team LD channels); or author is an automation account for LD
+  - `[Dependabot]` — author `dependabot[bot]` (if not already Renovate)
+  - `[Auto]` — other bot or clearly mechanical PRs (stacked bot updates, label `automated`)
+  - omit `[Kind]` only for normal human-authored feature/fix PRs (section 2)
 
 GitHub decides merged/closed/approved; Slack does not override that.
 
@@ -96,8 +101,8 @@ If no Slack thread exists after search, GitHub-only line is allowed.
 # Step 3 — Compose
 If **no** items after Steps 1, 1b, 2 (including outgoing): exit silently.
 Format strictly per **automation/FORMAT.md**. Classify:
-- Section 1: Renovate (Step 1)
-- Section 2: other **incoming** reviews (Step 1) and **outgoing** review requests (Step 1b + Step 2 outgoing), with outgoing title prefixed `[依頼]` / `[asked]` when `NUDGE_LOCALE` is ja / en
+- Section 1: PRs with `[Renovate]`, `[LD]`, `[Dependabot]`, or `[Auto]` (automated / low-touch)
+- Section 2: **incoming** without those kinds, plus **outgoing** (Step 1b + Step 2 outgoing); outgoing uses `[依頼]` / `[asked]` inside `line_label` per FORMAT
 - Section 3: duty
 - Section 4: other Slack follow-ups (no PR)
 
