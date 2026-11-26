@@ -10,11 +10,16 @@ Compose the webhook body in **Slack mrkdwn** inside the JSON `"text"` field. If 
 ## Opening
 
 - Start with `<@NUDGE_SLACK_USER_ID>` plus a short, light intro (`NUDGE_LOCALE` + optional `NUDGE_TONE`).
-- **ja (default copy):**  
-  `<@U…> お疲れ様です！代わりに現況を調べてまいりました！お手隙の時にご確認ください！（{weekday} {HH:MM} JST）`
+- **Timestamp (required):** append the **actual run time** in **Asia/Tokyo** — never leave `{weekday}` / `{HH:MM}` as literal placeholders.
+- **ja:**  
+  `お疲れ様です！代わりに現況を調べてまいりました！お手隙の時にご確認ください！`  
+  then `（{YYYY/M/D}（{曜}）{H:MM} JST）` e.g. `（2026/11/26（木）18:24 JST）`
 - **en:**  
-  `<@U…> Hope your day’s going well — I pulled together what’s still open for you. Peek when you have a moment! ({weekday} {HH:MM} JST)`
-- **bilingual:** ja line first, then one shorter en line.
+  `Hope your day’s going well — I pulled together what’s still open for you. Peek when you have a moment!`  
+  then `(YYYY-MM-DD {weekday} {H:MM} JST)` e.g. `(2026-11-26 Thu 18:24 JST)`
+- **bilingual:** ja line (with ja date stamp), then one shorter en line (with en date stamp).
+- Full first line example (ja):  
+  `<@U…> お疲れ様です！代わりに現況を調べてまいりました！お手隙の時にご確認ください！（2026/11/26（木）18:24 JST）`
 
 ## Sections (fixed order)
 
