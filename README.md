@@ -17,7 +17,7 @@ Slack app → **Incoming Webhooks** → webhook for **your `#times`**. Save the 
 | `NUDGE_GH_REVIEWER` | GitHub username |
 | `NUDGE_SLACK_USER_ID` | `U…` |
 | `NUDGE_TIMES_CHANNEL_ID` | `#times` `C…` |
-| `NUDGE_WATCH_CHANNEL_IDS` | comma-separated `C…` |
+| `NUDGE_WATCH_CHANNEL_IDS` | comma-separated `C…` (dev + **review/PR channel**, e.g. `C08L2BAC525`) |
 | `NUDGE_GITHUB_REPOS` | e.g. `amptalk/analysis` |
 | `NUDGE_TONE` | optional |
 | `NUDGE_SLACK_WEBHOOK_URL` | Incoming Webhook URL |

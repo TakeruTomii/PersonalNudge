@@ -2,6 +2,11 @@
 
 Compose the webhook body in **Slack mrkdwn** inside the JSON `"text"` field. If `INSTRUCTIONS.md` and this file disagree, **FORMAT.md** wins.
 
+## Hard rules
+
+- **Forbidden:** raw URLs like `— https://github.com/...` without `<url|label>` mrkdwn.
+- **Required:** when Step 2b found `slack_permalink`, every PR line **must** include `· <permalink|Slack>` (or ja `|Slack`).
+
 ## Opening
 
 - Start with one line: `<@NUDGE_SLACK_USER_ID>` plus a short intro (locale from `NUDGE_LOCALE`).
@@ -14,28 +19,31 @@ Render only sections that have at least one item. Never print empty section head
 | # | ja heading | en heading |
 |---|------------|------------|
 | 1 | *Renovate / 優先レビュー* | *Renovate / high-priority reviews* |
-| 2 | *その他レビュー* | *Other review requests* |
+| 2 | *その他レビュー（受信・依頼）* | *Other reviews (inbox & asked)* |
 | 3 | *今日の当番* | *Today's duty* |
 | 4 | *Slack フォロー* | *Slack follow-ups* |
 
-`bilingual`: use ja heading, optional `(EN: …)` suffix on the heading line only.
+`bilingual`: use ja heading, optional `(EN: …)` on the heading line only.
 
-## Line template — review items (with PR)
-
-When Step 2b attached a Slack permalink, use **dual links**:
+## Line template — PR with Slack (preferred)
 
 ```text
 • {short_title} — <{github_pr_url}|PR #{n}> · <{slack_permalink}|Slack>
 ```
 
-When there is no Slack match:
+## Line template — PR without Slack (only if Step 2b found nothing)
 
 ```text
 • {short_title} — <{github_pr_url}|PR #{n}>
 ```
 
-- `short_title`: `owner/repo`: title (≤80 chars).
-- Put Renovate-tagged PRs in section 1 per INSTRUCTIONS.
+## Outgoing review (you asked)
+
+Same templates; prefix title with `[依頼]` (ja) or `[asked]` (en), e.g.:
+
+```text
+• [依頼] amptalk/analysis: my feature title — <url|PR #123> · <permalink|Slack>
+```
 
 ## Line template — non-PR items
 
@@ -43,7 +51,8 @@ When there is no Slack match:
 • {short_title} — <{slack_permalink}|thread>
 ```
 
-Duty / follow-ups without a PR use Slack permalink only.
+- `short_title`: `owner/repo`: title (≤80 chars).
+- Renovate-tagged PRs go in section 1.
 
 ## Spacing
 
@@ -56,4 +65,4 @@ Duty / follow-ups without a PR use Slack permalink only.
 { "text": "<full mrkdwn body>" }
 ```
 
-Do not use `blocks` unless FORMAT is extended later; keep a single `text` field for compatibility.
+Keep a single `text` field (no `blocks` unless this file is extended later).
