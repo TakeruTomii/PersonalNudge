@@ -20,17 +20,30 @@ Render only sections that have at least one item. Never print empty section head
 
 `bilingual`: use ja heading, optional `(EN: …)` suffix on the heading line only.
 
-## Line template (default)
+## Line template — review items (with PR)
 
-One item = one bullet:
+When Step 2b attached a Slack permalink, use **dual links**:
 
 ```text
-• {short_title} — <{primary_url}|{label}>
+• {short_title} — <{github_pr_url}|PR #{n}> · <{slack_permalink}|Slack>
 ```
 
-- `short_title`: repo/PR title, duty name, or thread topic (≤80 chars).
-- `primary_url`: prefer GitHub PR URL for review items; Slack permalink for duty/follow-ups without a PR.
-- `label`: `PR #123` or `open` or `thread`.
+When there is no Slack match:
+
+```text
+• {short_title} — <{github_pr_url}|PR #{n}>
+```
+
+- `short_title`: `owner/repo`: title (≤80 chars).
+- Put Renovate-tagged PRs in section 1 per INSTRUCTIONS.
+
+## Line template — non-PR items
+
+```text
+• {short_title} — <{slack_permalink}|thread>
+```
+
+Duty / follow-ups without a PR use Slack permalink only.
 
 ## Spacing
 

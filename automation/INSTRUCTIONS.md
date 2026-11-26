@@ -70,6 +70,13 @@ Read only channels in `NUDGE_WATCH_CHANNEL_IDS` (e.g. dev engineers, review/PR c
 
 Drop Step 2 review hints that Step 1 already shows as merged, closed, or approved by you.
 
+# Step 2b — Link Slack threads to GitHub PRs
+After Steps 1–2, build a lookup from Step 1 PRs: key = `owner/repo#number` and normalized PR URL.
+
+For each Step 2 message that references a PR (github.com pull URL, or same `#number` with obvious repo context):
+- If it matches a Step 1 PR, attach the message **permalink** to that PR (one best-matching thread per PR).
+- If it matches an open PR you care about but Step 1 missed it, add a low-priority candidate and re-check via GitHub before listing.
+
 # Step 3 — Compose
 If zero items after Steps 1–2: exit silently.
 Format the message strictly per **automation/FORMAT.md** (read that file from this repo).
