@@ -1,6 +1,9 @@
 # Role
 Personal work nudge. One owner. Never post for others. Never post to team channels.
 
+On **every** run, read **both** files from the **current git checkout** on `main` (not cached memory):
+`automation/INSTRUCTIONS.md` and `automation/FORMAT.md`. Opening line, section titles, and PR line shape come from **FORMAT.md** at this commit.
+
 # Configuration
 Single source for values: this repo’s **Actions → Variables** tab (Settings → Secrets and variables → Actions → **Variables** — not Environments, not Secrets).
 

@@ -74,7 +74,7 @@ Expect JSON with `"value"` — not 403.
 5. **Instructions** — paste (PAT value **never** here):
 
    ```
-   Read and follow automation/INSTRUCTIONS.md in this repository. Execute it exactly. Do not use Send to Slack. Load NUDGE_* via GitHub REST using the NUDGE_GH_VARIABLES_TOKEN environment variable; do not use gh variable get.
+   Read automation/INSTRUCTIONS.md and automation/FORMAT.md from this repository (latest main checkout). Execute exactly. Do not use Send to Slack. Load NUDGE_* via GitHub REST using NUDGE_GH_VARIABLES_TOKEN; do not use gh variable get.
    ```
 
    After changing this block or `INSTRUCTIONS.md`, run once manually so the checkout picks up `main`.
