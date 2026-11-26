@@ -31,23 +31,23 @@ Render only sections that have at least one item. Never print empty section head
 
 ## Line template — PR with Slack (preferred)
 
+GitHub link is on the **title text only** (do not add a separate `PR #n` link).
+
 ```text
-• {short_title} — <{github_pr_url}|PR #{n}> · <{slack_permalink}|Slack>
+• <{github_pr_url}|{line_label}> · <{slack_permalink}|Slack>
 ```
+
+`line_label` = optional `[Kind]` + `[依頼]` + `{owner/repo}: {pr_title}` (≤100 chars). See INSTRUCTIONS for `[Kind]` prefixes.
 
 ## Line template — PR without Slack (only if Step 2b found nothing)
 
 ```text
-• {short_title} — <{github_pr_url}|PR #{n}>
+• <{github_pr_url}|{line_label}>
 ```
 
 ## Outgoing review (you asked)
 
-Same templates; prefix title with `[依頼]` (ja) or `[asked]` (en), e.g.:
-
-```text
-• [依頼] amptalk/analysis: my feature title — <url|PR #123> · <permalink|Slack>
-```
+Add `[依頼]` (ja) or `[asked]` (en) inside `line_label` before the title (after `[Kind]` if any).
 
 ## Line template — non-PR items
 
@@ -55,8 +55,7 @@ Same templates; prefix title with `[依頼]` (ja) or `[asked]` (en), e.g.:
 • {short_title} — <{slack_permalink}|thread>
 ```
 
-- `short_title`: `owner/repo`: title (≤80 chars).
-- Renovate-tagged PRs go in section 1.
+- `owner/repo`: title in `line_label`; GitHub URL wraps the whole label, not PR number alone.
 
 ## Spacing
 
